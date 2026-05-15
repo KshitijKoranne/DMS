@@ -32,14 +32,15 @@ It includes:
 - Retention and archive view for controlled copies, drafts, and retired records
 - Reports surface for inventory, open actions, signature exceptions, and audit exports
 - Admin configuration for document types, departments, lifecycle states, roles, and permissions
-- Local browser persistence for demo data
+- Turso/libSQL backend model for documents, versions, users, roles, signatures, training, retention, and audit events
+- API routes for document listing/creation, workflow transitions, e-signatures, and database health
+- Local browser fallback when the database environment is not configured
 
 ## Production Boundary
 
 The interface is designed around pharma/GxP document control expectations, but a regulated production deployment still needs:
 
 - Backend authentication and session management
-- Database-backed immutable audit trails
 - File storage with versioned controlled copies
 - Role and permission enforcement on the server
 - Backup, restore, disaster recovery, and retention execution
@@ -53,6 +54,24 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+## Database
+
+Create `.env.local` from `.env.example`:
+
+```bash
+TURSO_DATABASE_URL=libsql://dms-kskendsup.aws-ap-south-1.turso.io
+TURSO_AUTH_TOKEN=your-token
+```
+
+Then run:
+
+```bash
+npm run db:migrate
+npm run db:seed
+```
+
+The app uses Turso through Next.js route handlers. If the env vars are missing, the UI stays usable with local fallback data.
 
 ## Validation
 
